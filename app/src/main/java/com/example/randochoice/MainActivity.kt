@@ -1,6 +1,7 @@
 package com.example.randochoice
 
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
@@ -20,12 +21,13 @@ class MainActivity : AppCompatActivity() {
         val choiceListAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, choiceList)
         choiceListView.adapter = choiceListAdapter
         val resultTextView = findViewById<TextView>(R.id.result)
+        val resultTextAnimation = AnimationUtils.loadAnimation(applicationContext, R.anim.result_text_animation)
 
         addButton.setOnClickListener {
             val input = choiceInput!!.text.toString()
             if (input != "") {
-                val ellipsis = if (input.length >= 30) "..." else ""
-                choiceList.add(input.take(30) + ellipsis)
+                val ellipsis = if (input.length >= 18) "..." else ""
+                choiceList.add(input.take(18) + ellipsis)
                 choiceListView.adapter = choiceListAdapter
                 choiceInput.setText("")
             }
@@ -33,8 +35,11 @@ class MainActivity : AppCompatActivity() {
 
         chooseButton.setOnClickListener {
             if (choiceList.isNotEmpty()) {
-                val random = abs(Random.nextInt() % choiceList.size)
-                resultTextView.text = choiceList[random]
+                val result = choiceList[abs(Random.nextInt() % choiceList.size)]
+                resultTextView.text = result
+                resultTextView.startAnimation(resultTextAnimation)
+            } else {
+                resultTextView.text = "List is empty!"
             }
         }
 
