@@ -1,5 +1,7 @@
 package com.example.randochoice
 
+import android.media.AudioAttributes
+import android.media.SoundPool
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -23,6 +25,13 @@ class MainActivity : AppCompatActivity() {
         val resultTextView = findViewById<TextView>(R.id.result)
         val resultTextAnimation = AnimationUtils.loadAnimation(applicationContext, R.anim.result_text_animation)
 
+        val audioAttrib = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_GAME)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
+        val soundPlayer = SoundPool.Builder().setAudioAttributes(audioAttrib).setMaxStreams(2).build()
+        val resultSound = soundPlayer.load(this, R.raw.result_sound, 1)
+
         addButton.setOnClickListener {
             val input = choiceInput!!.text.toString()
             if (input != "") {
@@ -38,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                 val result = choiceList[abs(Random.nextInt() % choiceList.size)]
                 resultTextView.text = result
                 resultTextView.startAnimation(resultTextAnimation)
+                soundPlayer.play(resultSound, 1f, 1f, 0, 0, 1f)
             } else {
                 resultTextView.text = "List is empty!"
             }
