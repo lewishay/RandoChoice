@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainBackground"
+    android:background="@drawable/gradient"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,7 +28,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/righteous"
+        android:fontFamily="@font/abeezee"
         android:padding="10dp"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
@@ -35,13 +36,13 @@
         android:paddingBottom="10dp"
         android:text="@string/welcome_text"
         android:textColor="#4A13BA"
-        android:textSize="22sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/choiceInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.355" />
+        app:layout_constraintVertical_bias="0.464" />
 
     <EditText
         android:id="@+id/choiceInput"
@@ -89,7 +90,7 @@
         android:id="@+id/result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/righteous"
+        android:fontFamily="@font/abeezee"
         android:text=""
         android:textColor="#4A13BA"
         android:textSize="26sp"
