@@ -1,5 +1,6 @@
 package com.example.randochoice
 
+import android.content.Context
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
+import java.io.*
 import java.lang.StrictMath.abs
 import kotlin.random.Random
 
@@ -18,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         val choiceInput = findViewById<EditText>(R.id.choiceInput)
         val addButton = findViewById<Button>(R.id.addButton)
         val chooseButton = findViewById<Button>(R.id.choiceButton)
+        val loadButton = findViewById<ImageButton>(R.id.loadButton)
+        val saveButton = findViewById<ImageButton>(R.id.saveButton)
         val choiceListView = findViewById<ListView>(R.id.choiceList)
         val choiceList = ArrayList<String>()
         val choiceListAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, choiceList)
@@ -56,6 +60,26 @@ class MainActivity : AppCompatActivity() {
         choiceListView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
             choiceList.removeAt(position)
             choiceListView.adapter = choiceListAdapter
+        }
+
+        loadButton.setOnClickListener {
+            choiceList.clear()
+            val file = File(filesDir, "example_list.txt")
+            try {
+                file.readText().lines().forEach {
+                    choiceList.add(it)
+                }
+            } catch(e: Exception) {
+
+            }
+            choiceListView.adapter = choiceListAdapter
+        }
+
+        saveButton.setOnClickListener {
+            val data = choiceList.joinToString("\n")
+            openFileOutput("example_list.txt", Context.MODE_PRIVATE).use {
+                it.write(data.toByteArray())
+            }
         }
     }
 }

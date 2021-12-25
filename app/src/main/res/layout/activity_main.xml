@@ -36,13 +36,13 @@
         android:paddingBottom="10dp"
         android:text="@string/welcome_text"
         android:textColor="#4A13BA"
-        android:textSize="24sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/choiceInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.276"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.464" />
+        app:layout_constraintVertical_bias="0.462" />
 
     <EditText
         android:id="@+id/choiceInput"
@@ -93,12 +93,42 @@
         android:fontFamily="@font/abeezee"
         android:text=""
         android:textColor="#4A13BA"
-        android:textSize="28sp"
+        android:textSize="29sp"
         app:layout_constraintBottom_toTopOf="@+id/choiceButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/choiceList"
         app:layout_constraintVertical_bias="0.623" />
+
+    <ImageButton
+        android:id="@+id/loadButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_action_folder_open"
+        android:contentDescription="@string/load"
+        app:layout_constraintBottom_toTopOf="@+id/addButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.41"
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.296" />
+
+    <ImageButton
+        android:id="@+id/saveButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitCenter"
+        android:padding="4dp"
+        android:src="@drawable/ic_action_save"
+        android:contentDescription="@string/save"
+        app:layout_constraintBottom_toTopOf="@+id/addButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.442"
+        app:layout_constraintStart_toEndOf="@+id/loadButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.296" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
