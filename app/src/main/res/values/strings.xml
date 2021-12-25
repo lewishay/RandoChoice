@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">RandoChoice</string>
     <string name="choose_for_me">Choose for me!</string>
-    <string name="welcome_text">Enter your choices!</string>
+    <string name="welcome_text">RandoChoice</string>
     <string name="inputText">Add a choice</string>
     <string name="addText">Add</string>
+    <string name="load">Load</string>
+    <string name="save">Save</string>
 </resources>
