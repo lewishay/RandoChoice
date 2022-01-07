@@ -8,7 +8,6 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
-import java.io.*
 import java.lang.StrictMath.abs
 import kotlin.random.Random
 
@@ -17,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val choiceInput = findViewById<EditText>(R.id.choiceInput)
         val addButton = findViewById<Button>(R.id.addButton)
         val chooseButton = findViewById<Button>(R.id.choiceButton)
@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         val soundPlayer = SoundPool.Builder().setAudioAttributes(audioAttrib).setMaxStreams(2).build()
         val resultSound = soundPlayer.load(this, R.raw.result_sound, 1)
 
+        val loadDialog = LoadDialog(choiceList, choiceListView, choiceListAdapter, filesDir)
+
         addButton.setOnClickListener {
             val input = choiceInput!!.text.toString()
             if (input != "") {
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 resultTextView.startAnimation(resultTextAnimation)
                 soundPlayer.play(resultSound, 1f, 1f, 0, 0, 1f)
             } else {
-                resultTextView.text = "List is empty!"
+                resultTextView.text = getString(R.string.emptyList)
             }
         }
 
@@ -63,16 +65,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         loadButton.setOnClickListener {
-            choiceList.clear()
-            val file = File(filesDir, "example_list.txt")
-            try {
-                file.readText().lines().forEach {
-                    choiceList.add(it)
-                }
-            } catch(e: Exception) {
-
-            }
-            choiceListView.adapter = choiceListAdapter
+            loadDialog.show(supportFragmentManager, getString(R.string.load))
         }
 
         saveButton.setOnClickListener {

@@ -6,4 +6,6 @@
     <string name="addText">Add</string>
     <string name="load">Load</string>
     <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="emptyList">List is empty!</string>
 </resources>
