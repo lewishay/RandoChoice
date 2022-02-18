@@ -18,21 +18,24 @@ class LoadDialog(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
-            builder.setMessage(R.string.load)
-                .setPositiveButton(R.string.load,
-                    DialogInterface.OnClickListener { _, _ ->
-                        list.clear()
-                        val file = File(dir, "example_list.txt")
-                        file.readText().lines().forEach { item ->
-                            list.add(item)
-                        }
-                        listView.adapter = listAdapter
-                    })
-                .setNegativeButton(R.string.cancel,
-                    DialogInterface.OnClickListener { _, _ ->
-                        // User cancelled the dialog
-                    })
-            builder.create()
+            val fileList = dir.listFiles()
+            if(fileList != null && fileList.isNotEmpty()) {
+                val fileNameList = fileList.map { file -> file.name }.sorted().toTypedArray()
+                builder.setTitle(R.string.load)
+                builder.setItems(fileNameList, DialogInterface.OnClickListener { _, item ->
+                    list.clear()
+                    val file = File(dir, fileNameList[item])
+                    file.readText().lines().forEach { entry ->
+                        list.add(entry)
+                    }
+                    listView.adapter = listAdapter
+                })
+                builder.create()
+            } else {
+                builder.setMessage(R.string.noFiles)
+                    .setPositiveButton(R.string.ok, DialogInterface.OnClickListener { _, _ -> })
+                builder.create()
+            }
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 }

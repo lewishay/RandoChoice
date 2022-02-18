@@ -1,6 +1,5 @@
 package com.example.randochoice
 
-import android.content.Context
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
@@ -37,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         val resultSound = soundPlayer.load(this, R.raw.result_sound, 1)
 
         val loadDialog = LoadDialog(choiceList, choiceListView, choiceListAdapter, filesDir)
+        val saveDialog = SaveDialog(choiceList)
 
         addButton.setOnClickListener {
             val input = choiceInput!!.text.toString()
@@ -69,10 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            val data = choiceList.joinToString("\n")
-            openFileOutput("example_list.txt", Context.MODE_PRIVATE).use {
-                it.write(data.toByteArray())
-            }
+            saveDialog.show(supportFragmentManager, getString(R.string.save))
         }
     }
 }
