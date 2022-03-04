@@ -2,7 +2,6 @@ package com.example.randochoice
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -19,21 +18,22 @@ class LoadDialog(
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val fileList = dir.listFiles()
+            builder.setTitle(R.string.load)
             if(fileList != null && fileList.isNotEmpty()) {
                 val fileNameList = fileList.map { file -> file.name }.sorted().toTypedArray()
-                builder.setTitle(R.string.load)
-                builder.setItems(fileNameList, DialogInterface.OnClickListener { _, item ->
+                builder.setItems(fileNameList) { _, item ->
                     list.clear()
                     val file = File(dir, fileNameList[item])
                     file.readText().lines().forEach { entry ->
                         list.add(entry)
                     }
                     listView.adapter = listAdapter
-                })
+                }
+                builder.setNegativeButton(R.string.cancel) { _, _ -> }
                 builder.create()
             } else {
                 builder.setMessage(R.string.noFiles)
-                    .setPositiveButton(R.string.ok, DialogInterface.OnClickListener { _, _ -> })
+                builder.setPositiveButton(R.string.ok) { _, _ -> }
                 builder.create()
             }
         } ?: throw IllegalStateException("Activity cannot be null")
