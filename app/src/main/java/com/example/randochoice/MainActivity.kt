@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         val chooseButton = findViewById<Button>(R.id.choiceButton)
         val loadButton = findViewById<ImageButton>(R.id.loadButton)
         val saveButton = findViewById<ImageButton>(R.id.saveButton)
+        val deleteButton = findViewById<ImageButton>(R.id.deleteButton)
         val choiceListView = findViewById<ListView>(R.id.choiceList)
         val choiceList = ArrayList<String>()
         val choiceListAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, choiceList)
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         val loadDialog = LoadDialog(choiceList, choiceListView, choiceListAdapter, filesDir)
         val saveDialog = SaveDialog(choiceList)
+        val deleteDialog = DeleteDialog(filesDir)
 
         addButton.setOnClickListener {
             val input = choiceInput!!.text.toString()
@@ -70,6 +72,10 @@ class MainActivity : AppCompatActivity() {
 
         saveButton.setOnClickListener {
             saveDialog.show(supportFragmentManager, getString(R.string.save))
+        }
+
+        deleteButton.setOnClickListener {
+            deleteDialog.show(supportFragmentManager, getString(R.string.delete))
         }
     }
 }

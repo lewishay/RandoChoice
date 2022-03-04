@@ -39,10 +39,10 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/choiceInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.276"
+        app:layout_constraintHorizontal_bias="0.168"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.462" />
+        app:layout_constraintVertical_bias="0.461" />
 
     <EditText
         android:id="@+id/choiceInput"
@@ -106,29 +106,42 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_action_folder_open"
         android:contentDescription="@string/load"
+        android:src="@drawable/ic_action_folder_open"
         app:layout_constraintBottom_toTopOf="@+id/addButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.41"
+        app:layout_constraintEnd_toStartOf="@+id/saveButton"
         app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.296" />
+        app:layout_constraintVertical_bias="0.444" />
 
     <ImageButton
         android:id="@+id/saveButton"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:scaleType="fitCenter"
-        android:padding="4dp"
-        android:src="@drawable/ic_action_save"
         android:contentDescription="@string/save"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_action_save"
         app:layout_constraintBottom_toTopOf="@+id/addButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.442"
+        app:layout_constraintEnd_toStartOf="@+id/deleteButton"
         app:layout_constraintStart_toEndOf="@+id/loadButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.296" />
+        app:layout_constraintVertical_bias="0.444" />
+
+    <ImageButton
+        android:id="@+id/deleteButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/save"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_action_trash"
+        app:layout_constraintBottom_toTopOf="@+id/addButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/saveButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.444" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

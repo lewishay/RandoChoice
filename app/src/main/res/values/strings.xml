@@ -6,9 +6,10 @@
     <string name="addText">Add</string>
     <string name="load">Load</string>
     <string name="save">Save</string>
-    <string name="noFiles">There are no saved files!</string>
+    <string name="delete">Delete</string>
+    <string name="noFiles">There are no saved lists!</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="emptyList">The list is empty!</string>
-    <string name="enterFileName">Enter a file name</string>
+    <string name="enterFileName">Enter list name</string>
 </resources>
