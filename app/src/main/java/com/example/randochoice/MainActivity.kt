@@ -22,9 +22,10 @@ class MainActivity : AppCompatActivity() {
         val loadButton = findViewById<ImageButton>(R.id.loadButton)
         val saveButton = findViewById<ImageButton>(R.id.saveButton)
         val deleteButton = findViewById<ImageButton>(R.id.deleteButton)
+        val clearListButton = findViewById<Button>(R.id.clearButton)
         val choiceListView = findViewById<ListView>(R.id.choiceList)
         val choiceList = ArrayList<String>()
-        val choiceListAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, choiceList)
+        val choiceListAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, choiceList)
         choiceListView.adapter = choiceListAdapter
         val resultTextView = findViewById<TextView>(R.id.result)
         val resultTextAnimation = AnimationUtils.loadAnimation(applicationContext, R.anim.result_text_animation)
@@ -40,6 +41,11 @@ class MainActivity : AppCompatActivity() {
         val saveDialog = SaveDialog(choiceList)
         val deleteDialog = DeleteDialog(filesDir)
 
+        fun resultAnimation() {
+            resultTextView.startAnimation(resultTextAnimation)
+            soundPlayer.play(resultSound, 1f, 1f, 0, 0, 1f)
+        }
+
         addButton.setOnClickListener {
             val input = choiceInput!!.text.toString()
             if (input != "") {
@@ -47,23 +53,35 @@ class MainActivity : AppCompatActivity() {
                 choiceList.add(input.take(18) + ellipsis)
                 choiceListView.adapter = choiceListAdapter
                 choiceInput.setText("")
+                resultTextView.text = ""
             }
         }
 
         chooseButton.setOnClickListener {
-            if (choiceList.isNotEmpty()) {
+            if (choiceList.isEmpty()) {
+                resultTextView.text = getString(R.string.emptyList)
+                resultAnimation()
+            } else {
                 val result = choiceList[abs(Random.nextInt() % choiceList.size)]
                 resultTextView.text = result
-                resultTextView.startAnimation(resultTextAnimation)
-                soundPlayer.play(resultSound, 1f, 1f, 0, 0, 1f)
-            } else {
-                resultTextView.text = getString(R.string.emptyList)
+                resultAnimation()
             }
         }
 
         choiceListView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
             choiceList.removeAt(position)
             choiceListView.adapter = choiceListAdapter
+        }
+
+        clearListButton.setOnClickListener {
+            if (choiceList.isEmpty()) {
+                resultTextView.text = getString(R.string.emptyList)
+                resultAnimation()
+            } else {
+                choiceList.clear()
+                choiceListView.adapter = choiceListAdapter
+                resultTextView.text = ""
+            }
         }
 
         loadButton.setOnClickListener {
