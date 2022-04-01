@@ -7,6 +7,7 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import java.lang.StrictMath.abs
 import kotlin.random.Random
 
@@ -51,10 +52,28 @@ class MainActivity : AppCompatActivity() {
             if (input != "") {
                 val ellipsis = if (input.length >= 18) "..." else ""
                 choiceList.add(input.take(18) + ellipsis)
-                choiceListView.adapter = choiceListAdapter
+                choiceListAdapter.notifyDataSetChanged()
                 choiceInput.setText("")
                 resultTextView.text = ""
             }
+        }
+
+        fun listAnimation() {
+            Thread(fun() {
+                for (i in 1..choiceList.size) {
+                    runOnUiThread {
+                        val currentItem = i - 1
+                        val previousItem = i - 2
+                        choiceListView.getChildAt(currentItem)
+                            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                        if (i > 1) {
+                            choiceListView.getChildAt(previousItem)
+                                .setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+                        }
+                    }
+                    Thread.sleep(500)
+                }
+            }).start()
         }
 
         chooseButton.setOnClickListener {
@@ -62,6 +81,9 @@ class MainActivity : AppCompatActivity() {
                 resultTextView.text = getString(R.string.emptyList)
                 resultAnimation()
             } else {
+                listAnimation()
+                choiceListView.getChildAt(choiceList.size - 1)
+                    .setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
                 val result = choiceList[abs(Random.nextInt() % choiceList.size)]
                 resultTextView.text = result
                 resultAnimation()
@@ -70,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         choiceListView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
             choiceList.removeAt(position)
-            choiceListView.adapter = choiceListAdapter
+            choiceListAdapter.notifyDataSetChanged()
         }
 
         clearListButton.setOnClickListener {
@@ -79,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                 resultAnimation()
             } else {
                 choiceList.clear()
-                choiceListView.adapter = choiceListAdapter
+                choiceListAdapter.notifyDataSetChanged()
                 resultTextView.text = ""
             }
         }
