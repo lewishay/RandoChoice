@@ -1,12 +1,19 @@
 package com.example.randochoice
 
+import android.animation.AnimatorInflater
+import android.animation.ObjectAnimator
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import java.lang.StrictMath.abs
 import kotlin.random.Random
@@ -29,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         val choiceListAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, choiceList)
         choiceListView.adapter = choiceListAdapter
         val resultTextView = findViewById<TextView>(R.id.result)
-        val resultTextAnimation = AnimationUtils.loadAnimation(applicationContext, R.anim.result_text_animation)
 
         val audioAttrib = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_GAME)
@@ -42,7 +48,10 @@ class MainActivity : AppCompatActivity() {
         val saveDialog = SaveDialog(choiceList)
         val deleteDialog = DeleteDialog(filesDir)
 
-        fun resultAnimation() {
+        val listItemAnimation = AnimatorInflater.loadAnimator(applicationContext, R.animator.list_item_animation)
+        val resultTextAnimation = AnimationUtils.loadAnimation(applicationContext, R.anim.result_text_animation)
+        fun resultAnimation(resultText: String) {
+            resultTextView.text = resultText
             resultTextView.startAnimation(resultTextAnimation)
             soundPlayer.play(resultSound, 1f, 1f, 0, 0, 1f)
         }
@@ -58,35 +67,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        fun listAnimation() {
-            Thread(fun() {
-                for (i in 1..choiceList.size) {
-                    runOnUiThread {
-                        val currentItem = i - 1
-                        val previousItem = i - 2
-                        choiceListView.getChildAt(currentItem)
-                            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        if (i > 1) {
-                            choiceListView.getChildAt(previousItem)
-                                .setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
-                        }
-                    }
-                    Thread.sleep(500)
+        fun listAnimation(row: Int) {
+            if(row == choiceList.size) {
+                val result = choiceList[abs(Random.nextInt() % choiceList.size)]
+                resultAnimation(result)
+            } else {
+                listItemAnimation.setTarget(choiceListView.getChildAt(row))
+                listItemAnimation.start()
+                listItemAnimation.doOnEnd {
+                    listItemAnimation.removeAllListeners()
+                    listAnimation(row + 1)
                 }
-            }).start()
+            }
         }
 
         chooseButton.setOnClickListener {
             if (choiceList.isEmpty()) {
-                resultTextView.text = getString(R.string.emptyList)
-                resultAnimation()
+                resultAnimation(getString(R.string.emptyList))
             } else {
-                listAnimation()
-                choiceListView.getChildAt(choiceList.size - 1)
-                    .setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
-                val result = choiceList[abs(Random.nextInt() % choiceList.size)]
-                resultTextView.text = result
-                resultAnimation()
+                listAnimation(0)
             }
         }
 
@@ -97,8 +96,7 @@ class MainActivity : AppCompatActivity() {
 
         clearListButton.setOnClickListener {
             if (choiceList.isEmpty()) {
-                resultTextView.text = getString(R.string.emptyList)
-                resultAnimation()
+                resultAnimation(getString(R.string.emptyList))
             } else {
                 choiceList.clear()
                 choiceListAdapter.notifyDataSetChanged()
