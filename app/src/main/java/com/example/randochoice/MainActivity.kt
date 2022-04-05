@@ -1,20 +1,14 @@
 package com.example.randochoice
 
 import android.animation.AnimatorInflater
-import android.animation.ObjectAnimator
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
-import androidx.core.content.ContextCompat
 import java.lang.StrictMath.abs
 import kotlin.random.Random
 
@@ -44,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val soundPlayer = SoundPool.Builder().setAudioAttributes(audioAttrib).setMaxStreams(2).build()
         val resultSound = soundPlayer.load(this, R.raw.result_sound, 1)
 
-        val loadDialog = LoadDialog(choiceList, choiceListView, choiceListAdapter, filesDir)
+        val loadDialog = LoadDialog(choiceList, choiceListView, choiceListAdapter, filesDir, resultTextView)
         val saveDialog = SaveDialog(choiceList)
         val deleteDialog = DeleteDialog(filesDir)
 
@@ -56,7 +50,11 @@ class MainActivity : AppCompatActivity() {
             soundPlayer.play(resultSound, 1f, 1f, 0, 0, 1f)
         }
 
-        addButton.setOnClickListener {
+        fun ensureNoAnimation(action: () -> Unit) {
+            if (!listItemAnimation.isRunning) action()
+        }
+
+        addButton.setOnClickListener { ensureNoAnimation {
             val input = choiceInput!!.text.toString()
             if (input != "") {
                 val ellipsis = if (input.length >= 18) "..." else ""
@@ -65,10 +63,10 @@ class MainActivity : AppCompatActivity() {
                 choiceInput.setText("")
                 resultTextView.text = ""
             }
-        }
+        }}
 
         fun listAnimation(row: Int) {
-            if(row == choiceList.size) {
+            if (row == choiceList.size || row > 7) {
                 val result = choiceList[abs(Random.nextInt() % choiceList.size)]
                 resultAnimation(result)
             } else {
@@ -81,20 +79,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        chooseButton.setOnClickListener {
+        chooseButton.setOnClickListener { ensureNoAnimation {
             if (choiceList.isEmpty()) {
                 resultAnimation(getString(R.string.emptyList))
             } else {
+                resultTextView.text = ""
                 listAnimation(0)
             }
-        }
+        }}
 
         choiceListView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
             choiceList.removeAt(position)
             choiceListAdapter.notifyDataSetChanged()
         }
 
-        clearListButton.setOnClickListener {
+        clearListButton.setOnClickListener { ensureNoAnimation {
             if (choiceList.isEmpty()) {
                 resultAnimation(getString(R.string.emptyList))
             } else {
@@ -102,11 +101,11 @@ class MainActivity : AppCompatActivity() {
                 choiceListAdapter.notifyDataSetChanged()
                 resultTextView.text = ""
             }
-        }
+        }}
 
-        loadButton.setOnClickListener {
+        loadButton.setOnClickListener { ensureNoAnimation {
             loadDialog.show(supportFragmentManager, getString(R.string.load))
-        }
+        }}
 
         saveButton.setOnClickListener {
             saveDialog.show(supportFragmentManager, getString(R.string.save))

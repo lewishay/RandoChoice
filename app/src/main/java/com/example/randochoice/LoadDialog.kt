@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import java.io.File
 
@@ -12,7 +13,8 @@ class LoadDialog(
     private val list: ArrayList<String>,
     private val listView: ListView,
     private val listAdapter: ArrayAdapter<String>,
-    private val dir: File) : DialogFragment() {
+    private val dir: File,
+    private val resultTextView: TextView) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -28,6 +30,7 @@ class LoadDialog(
                         list.add(entry)
                     }
                     listView.adapter = listAdapter
+                    resultTextView.text = ""
                 }
                 builder.setNegativeButton(R.string.cancel) { _, _ -> }
                 builder.create()
