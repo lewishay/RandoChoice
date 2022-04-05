@@ -88,10 +88,10 @@ class MainActivity : AppCompatActivity() {
             }
         }}
 
-        choiceListView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
+        choiceListView.onItemClickListener = OnItemClickListener { _, _, position, _ -> ensureNoAnimation {
             choiceList.removeAt(position)
             choiceListAdapter.notifyDataSetChanged()
-        }
+        }}
 
         clearListButton.setOnClickListener { ensureNoAnimation {
             if (choiceList.isEmpty()) {
