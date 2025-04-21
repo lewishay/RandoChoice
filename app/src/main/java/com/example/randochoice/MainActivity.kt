@@ -1,14 +1,19 @@
 package com.example.randochoice
 
 import android.animation.AnimatorInflater
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
 import android.view.animation.AnimationUtils
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
+
 import java.lang.StrictMath.abs
 import kotlin.random.Random
 
@@ -27,8 +32,24 @@ class MainActivity : AppCompatActivity() {
         val clearListButton = findViewById<Button>(R.id.clearButton)
         val choiceListView = findViewById<ListView>(R.id.choiceList)
         val choiceList = ArrayList<String>()
-        val choiceListAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, choiceList)
+
+        // The getView override here is needed to change the ListView text colour
+        val choiceListAdapter = object : ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, choiceList) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                view.findViewById<TextView>(android.R.id.text1).setTextColor(Color.parseColor("#69a5d6"))
+                view.layoutParams.height = 150
+                return view
+            }
+        }
         choiceListView.adapter = choiceListAdapter
+
+        // More changes to ListView styling because it sucks and can't be changed in activity_main.xml
+        val dividerDrawable = GradientDrawable().apply {
+            setColor(resources.getColor(R.color.colorGreenDark))
+            setSize(3, 3)
+        }
+        choiceListView.divider = dividerDrawable
         val resultTextView = findViewById<TextView>(R.id.result)
 
         val audioAttrib = AudioAttributes.Builder()
