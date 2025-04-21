@@ -2,5 +2,5 @@
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="100"
     android:propertyName="backgroundColor"
-    android:valueFrom="@color/colorAccent"
+    android:valueFrom="@color/colorGreen"
     android:valueTo="@android:color/transparent" />
