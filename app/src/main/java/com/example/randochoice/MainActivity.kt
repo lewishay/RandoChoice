@@ -1,7 +1,6 @@
 package com.example.randochoice
 
 import android.animation.AnimatorInflater
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.media.AudioAttributes
 import android.media.SoundPool
@@ -16,6 +15,7 @@ import androidx.core.animation.doOnEnd
 
 import java.lang.StrictMath.abs
 import kotlin.random.Random
+import androidx.core.graphics.toColorInt
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         val choiceListAdapter = object : ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, choiceList) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
-                view.findViewById<TextView>(android.R.id.text1).setTextColor(Color.parseColor("#69a5d6"))
+                view.findViewById<TextView>(android.R.id.text1).setTextColor("#69a5d6".toColorInt())
                 view.layoutParams.height = 150
                 return view
             }
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         // More changes to ListView styling because it sucks and can't be changed in activity_main.xml
         val dividerDrawable = GradientDrawable().apply {
-            setColor(resources.getColor(R.color.colorGreenDark))
+            setColor(resources.getColor(R.color.colorGreenDark, null))
             setSize(3, 3)
         }
         choiceListView.divider = dividerDrawable

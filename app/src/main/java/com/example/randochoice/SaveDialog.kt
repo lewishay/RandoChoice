@@ -4,9 +4,8 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.widget.EditText
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.save_input.view.*
 
 class SaveDialog(private val list: ArrayList<String>) : DialogFragment() {
 
@@ -15,11 +14,12 @@ class SaveDialog(private val list: ArrayList<String>) : DialogFragment() {
             val builder = AlertDialog.Builder(it)
             builder.setTitle(R.string.save)
             if(list.isNotEmpty()) {
-                val view = LayoutInflater.from(it).inflate(R.layout.save_input, null)
+                val view = it.layoutInflater.inflate(R.layout.save_input, null)
                 builder.setView(view)
                 builder.setPositiveButton(R.string.save) { _, _ ->
                     val data = list.joinToString("\n")
-                    val name = view.saveInput.text.toString()
+                    val saveInput = view.findViewById<EditText>(R.id.saveInput)
+                    val name = saveInput.text.toString()
                     if (name != "") {
                         it.openFileOutput(name, Context.MODE_PRIVATE).use { outputStream ->
                             outputStream.write(data.toByteArray())
